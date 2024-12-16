@@ -2,6 +2,7 @@ package org.yearup.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -36,9 +37,13 @@ public class CategoriesController {
 
     // add the appropriate annotation for a get action
     @GetMapping("")
-    public List<Category> getAll() {
+    public ResponseEntity<List<Category>> getAll() {
         // find and return all categories
-        return CategoryDao.getAllCategories();
+        List<Category> allCategories = categoryDao.getAllCategories();
+        if (allCategories.isEmpty()){
+            return  ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(allCategories);
     }
 
     // add the appropriate annotation for a get action
@@ -53,7 +58,7 @@ public class CategoriesController {
     @GetMapping("{categoryId}/products")
     public List<Product> getProductsById(@PathVariable int categoryId) {
         // get a list of product by categoryId
-        return productDao.listByCategoryId(categoryId)
+        return productDao.listByCategoryId(categoryId);
     }
 
     // add annotation to call this method for a POST action
@@ -76,7 +81,7 @@ public class CategoriesController {
         try {
             categoryDao.update(id, category);
         } catch (Exception ex) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops...our bad.")
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops...our bad.");
         }
     }
 
