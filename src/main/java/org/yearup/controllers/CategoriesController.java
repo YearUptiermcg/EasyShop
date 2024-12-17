@@ -64,7 +64,7 @@ public class CategoriesController {
     // add annotation to call this method for a POST action
     // add annotation to ensure that only an ADMIN can call this function
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @RequestMapping(path = "/categories", method = RequestMethod.POST)
+    @RequestMapping(path = "", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
     public Category addCategory(@RequestBody Category category) {
         // insert the category
