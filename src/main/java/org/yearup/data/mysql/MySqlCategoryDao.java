@@ -1,5 +1,7 @@
 package org.yearup.data.mysql;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 import org.yearup.data.CategoryDao;
 import org.yearup.models.Category;
@@ -11,101 +13,140 @@ import java.util.List;
 
 @Component
 public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao {
+    private DataSource dataSource;
 
-    public MySqlCategoryDao(DataSource dataSource) {
+    @Autowired
+    public MySqlCategoryDao(DataSource dataSource){
         super(dataSource);
+        this.dataSource = dataSource;
     }
 
     @Override
-    public List<Category> getAllCategories() {
+    public List<Category> getAllCategories()
+    {
         List<Category> categories = new ArrayList<>();
-        String sql = "SELECT * FROM categories;";
 
-        try (Connection connection = getConnection(); PreparedStatement query = connection.prepareStatement(sql); ResultSet results = query.executeQuery()) {
-            while (results.next()) {
-                int catId = results.getInt(1);
-                String catName = results.getString(2);
-                String catDesc = results.getString(3);
-                categories.add(new Category(catId, catName, catDesc));
+        try(
+                Connection connection = dataSource.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM easyshop.categories;");
+                ResultSet resultSet = preparedStatement.executeQuery();
+        ){
+            while(resultSet.next()){
+                int categoryId = resultSet.getInt(1);
+                String categoryName = resultSet.getString(2);
+                String categoryDescription = resultSet.getString(3);
+
+                categories.add(new Category(categoryId, categoryName, categoryDescription));
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        }catch(SQLException e){
+            e.printStackTrace();
         }
-
         return categories;
     }
 
     @Override
-    public Category getById(int categoryId) {
-        String sql = "SELECT category_id, name, description FROM categories WHERE category_id = ?";
+    public Category getById(int categoryId)
+    {
+        try(
+                Connection connection = dataSource.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(
+                        "SELECT * \n" +
+                                "FROM easyshop.categories\n" +
+                                "WHERE category_id = ?; ");
+        ){
+            preparedStatement.setInt(1, categoryId);
+            try(ResultSet resultSet = preparedStatement.executeQuery()){
+                while(resultSet.next()){
+                    int catId = resultSet.getInt(1);
+                    String categoryName = resultSet.getString(2);
+                    String categoryDescription = resultSet.getString(3);
 
-        try (Connection connection = getConnection(); PreparedStatement query = connection.prepareStatement(sql)) {
-            query.setInt(1, categoryId);
-            try (ResultSet result = query.executeQuery()) {
-                return result.next() ? mapRow(result) : null;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public Category create(Category category) {
-        String sql = "INSERT INTO categories(name, description) VALUES (?,?);";
-
-        try (Connection connection = getConnection(); PreparedStatement query = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            query.setString(1, category.getName());
-            query.setString(2, category.getDescription());
-            int i = query.executeUpdate();
-            if (i > 0) {
-                ResultSet generatedKeys = query.getGeneratedKeys();
-                if (generatedKeys.next()) {
-                    int generatedId = generatedKeys.getInt(1);
-                    return getById(generatedId);
+                    return new Category(catId, categoryName, categoryDescription);
                 }
             }
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
+        }catch(SQLException e){
+            e.printStackTrace();
         }
         return null;
     }
 
     @Override
-    public void update(int categoryId, Category category) {
-        String sql = "UPDATE categories SET name = ?, description = ? WHERE category_id = ?";
+    public Category create(Category category)
+    {
+        try(
+                Connection connection = dataSource.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(
+                        "INSERT INTO easyshop.categories(name, description)\n" +
+                                "VALUES (?, ?);", Statement.RETURN_GENERATED_KEYS)
+        ){
+            preparedStatement.setString(1, category.getName());
+            preparedStatement.setString(2, category.getDescription());
 
-        try (Connection connection = getConnection(); PreparedStatement query = connection.prepareStatement(sql)) {
-            query.setString(1, category.getName());
-            query.setString(2, category.getDescription());
-            query.setInt(3, categoryId);
-            query.executeUpdate();
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
+            int rowsEffected = preparedStatement.executeUpdate();
+            if(rowsEffected > 0){
+                ResultSet generatedKey = preparedStatement.getGeneratedKeys();
+                if(generatedKey.next()){
+                    int categoryId = generatedKey.getInt(1);
+                    return getById(categoryId);
+                }
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void update(int categoryId, Category category)
+    {
+        try(
+                Connection connection = dataSource.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(
+                        "UPDATE easyshop.categories\n" +
+                                "SET name = ?, description = ?\n" +
+                                "WHERE category_id = ?;");
+        ){
+            preparedStatement.setString(1, category.getName());
+            preparedStatement.setString(2, category.getDescription());
+            preparedStatement.setInt(3, categoryId);
+
+            preparedStatement.executeUpdate();
+        }catch(SQLException e){
+            e.printStackTrace();
         }
     }
 
     @Override
-    public void delete(int categoryId) {
-        String sql = "DELETE FROM categories WHERE category_id = ?;";
-
-        try (Connection connection = getConnection(); PreparedStatement query = connection.prepareStatement(sql)) {
-            query.setInt(1, categoryId);
-            query.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+    public void delete(int categoryId)
+    {
+        try(
+                Connection connection = dataSource.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(
+                        "DELETE \n" +
+                                "FROM easyshop.categories\n" +
+                                "WHERE category_id = ?;")
+        ){
+            preparedStatement.setInt(1, categoryId);
+            preparedStatement.executeUpdate();
+        }catch(SQLException e){
+            e.printStackTrace();
         }
     }
 
-    private Category mapRow(ResultSet row) throws SQLException {
+    private Category mapRow(ResultSet row) throws SQLException
+    {
         int categoryId = row.getInt("category_id");
         String name = row.getString("name");
         String description = row.getString("description");
 
-        Category category = new Category();
-        category.setCategoryId(categoryId);
-        category.setName(name);
-        category.setDescription(description);
+        Category category = new Category()
+        {{
+            setCategoryId(categoryId);
+            setName(name);
+            setDescription(description);
+        }};
 
         return category;
     }
+
 }
