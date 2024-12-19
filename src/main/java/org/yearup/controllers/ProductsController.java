@@ -30,7 +30,7 @@ public class ProductsController
                                 @RequestParam(name="minPrice", required = false) BigDecimal minPrice,
                                 @RequestParam(name="maxPrice", required = false) BigDecimal maxPrice,
                                 @RequestParam(name="color", required = false) String color
-                                )
+    )
     {
         try
         {
@@ -81,7 +81,11 @@ public class ProductsController
     {
         try
         {
-            productDao.create(product);
+            // Ensure the product ID matches the path variable
+            product.setId(id);
+
+            // Call the correct DAO method to update the product
+            productDao.update(product);
         }
         catch(Exception ex)
         {
