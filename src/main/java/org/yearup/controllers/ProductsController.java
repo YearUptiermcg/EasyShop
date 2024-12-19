@@ -81,11 +81,9 @@ public class ProductsController
     {
         try
         {
-            // Ensure the product ID matches the path variable
-            product.setId(id);
-
-            // Call the correct DAO method to update the product
-            productDao.update(product);
+            // Bug Fix: The previous code was incorrectly creating a new product.
+            // It should update the existing product based on the provided ID.
+            productDao.update(id, product);
         }
         catch(Exception ex)
         {
