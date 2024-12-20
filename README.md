@@ -1,6 +1,5 @@
 # EasyShop Product Management API
 
-![EasyShop Logo](C:/Users/Student/Desktop/logo.png)
 
 EasyShop is a robust e-commerce backend API designed to simplify product management, user authentication, and search functionalities. Built with Java, Spring Boot, and MySQL, this application provides seamless operations for online shopping systems.
 
@@ -36,9 +35,6 @@ EasyShop is a robust e-commerce backend API designed to simplify product managem
 - Search and filter by category, price range, and color.
 - Full CRUD operations for administrators.
 
-### Shopping Cart (Optional)
-- Add and remove items, view totals.
-- Persistent cart data tied to user accounts.
 
 ---
 
@@ -54,10 +50,14 @@ EasyShop is a robust e-commerce backend API designed to simplify product managem
 ### Phase 2 - Bug Fixes
 1. **Bug 1**: Resolved inaccurate search results.
   - **Solution**: Optimized SQL query logic.
-2. **Bug 2**: Prevented duplication during updates.
+2. **Bug 2**: Prevented duplication during updates.![update.bug2.PNG](..%2F..%2F..%2FDesktop%2Fupdate.bug2.PNG)
   - **Solution**: Ensured updates modify existing records.
 
-   ![Bug Fix Demonstration](C:/Users/Student/Desktop/update.bug2/bug-fix.png)
+   ![Bug Fix Demonstration]  [update.bug2.PNG](..%2F..%2F..%2FDesktop%2Fupdate.bug2.PNG)
+
+### Phase 4- Update Profile
+1.Update Profile(Optional)
+- Add and update user profiles
 
 ---
 
@@ -76,7 +76,7 @@ EasyShop is a robust e-commerce backend API designed to simplify product managem
 git clone <repository-url>
 cd <project-folder>
 
-# License
+#### License 
 
 This project is licensed under the **MIT License**.  
 
