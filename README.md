@@ -1,27 +1,7 @@
 # EasyShop Product Management API
 
-
-EasyShop is a robust e-commerce backend API designed to simplify product management, user authentication, and search functionalities. Built with Java, Spring Boot, and MySQL, this application provides seamless operations for online shopping systems.
-
----
-
-## Table of Contents
-1. [Application Structure](#application-structure)
-2. [Features](#features)
-3. [Phases Overview](#phases-overview)
-4. [Getting Started](#getting-started)
-5. [Authentication](#authentication)
-6. [Interesting Code](#interesting-code)
-7. [License](#license)
-
----
-
-## Application Structure
-
-### Core Components:
-- **User Management**: Secure registration and login functionality with role-based access.
-- **Product Management**: CRUD operations for products, with advanced search and filtering options.
-- **Database Integration**: MySQL backend, structured to support efficient data retrieval and storage.
+## Project Overview
+**EasyShop** is a robust e-commerce backend API designed to simplify product management, user authentication, and search functionalities. Built with Java, Spring Boot, and MySQL, this application provides seamless operations for online shopping systems.
 
 ---
 
@@ -34,7 +14,6 @@ EasyShop is a robust e-commerce backend API designed to simplify product managem
 ### Product Operations
 - Search and filter by category, price range, and color.
 - Full CRUD operations for administrators.
-
 
 ---
 
@@ -50,37 +29,57 @@ EasyShop is a robust e-commerce backend API designed to simplify product managem
 ### Phase 2 - Bug Fixes
 1. **Bug 1**: Resolved inaccurate search results.
   - **Solution**: Optimized SQL query logic.
-2. **Bug 2**: Prevented duplication during updates.![update.bug2.PNG](..%2F..%2F..%2FDesktop%2Fupdate.bug2.PNG)
+2. **Bug 2**: Prevented duplication during updates.
   - **Solution**: Ensured updates modify existing records.
+    ![screenshot](imageFolder/update.bug2.PNG)
 
-   ![Bug Fix Demonstration]  [update.bug2.PNG](..%2F..%2F..%2FDesktop%2Fupdate.bug2.PNG)
 
-### Phase 4- Update Profile
-1.Update Profile(Optional)
-- Add and update user profiles
+### Phase 4 - Update Profile
+1. **Update Profile (Optional)**:
+  - Add and update user profiles.
+
+---
+
+## Components
+
+### User Management
+Handles user registration, login, and role-based access control. Uses JWT tokens for secure communication.
+
+### Product Management
+Manages product data and provides CRUD functionalities. Supports advanced filtering for search results based on product attributes like category, price range, and color.
+
+### CategoriesController
+Responsible for managing product categories. Includes API endpoints to create, read, update, and delete categories.
 
 ---
 
 ## Getting Started
 
-### Prerequisites:
+### Prerequisites
 1. Java Development Kit (JDK)
 2. MySQL Database Server
 3. Postman or similar API testing tool
 4. Git
 
-### Installation:
+### Installation
 
 #### 1. Clone the Repository:
 ```bash
 git clone <repository-url>
 cd <project-folder>
+---------------------------------------------------------------------------------------------------------
 
-#### License 
+**Interesting Code Section:
 
-This project is licensed under the **MIT License**.  
+One of the most interesting sections of the code is the **Product Search and Filter** functionality. This method allows users to search for products by category, price range, and color, and efficiently retrieves data from the database using optimized SQL queries.
 
-*
+### Code Snippet :
+```java
+public List<Product> searchProducts(String category, double minPrice, double maxPrice, String color) {
+    String sql = "SELECT * FROM products WHERE category = ? AND price BETWEEN ? AND ? AND color = ?";
+    return jdbcTemplate.query(sql, new Object[]{category, minPrice, maxPrice, color}, new ProductRowMapper());
+}
+--------------------------------------------------------------------------------------------------------
 
-
-
+## License
+This project is licensed under the MIT License.
