@@ -69,7 +69,7 @@ git clone <repository-url>
 cd <project-folder>
 ---------------------------------------------------------------------------------------------------------
 
-**Interesting Code Section:
+### 2. Interesting Code Section:
 
 One of the most interesting sections of the code is the **Product Search and Filter** functionality. This method allows users to search for products by category, price range, and color, and efficiently retrieves data from the database using optimized SQL queries.
 
