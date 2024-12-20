@@ -31,7 +31,7 @@
   - **Solution**: Optimized SQL query logic.
 2. **Bug 2**: Prevented duplication during updates.
   - **Solution**: Ensured updates modify existing records.
-    ![screenshot](imageFolder/update.bug2.PNG)
+
 
 
 ### Phase 4 - Update Profile
