@@ -21,22 +21,22 @@
 
 ### Phase 1 - CategoriesController
 - **Endpoints**:
-  - `GET /categories`: Fetch all categories.
-  - `POST /categories`: Add a new category (admin only).
-  - `PUT /categories/{id}`: Update a category.
-  - `DELETE /categories/{id}`: Delete a category.
+    - `GET /categories`: Fetch all categories.
+    - `POST /categories`: Add a new category (admin only).
+    - `PUT /categories/{id}`: Update a category.
+    - `DELETE /categories/{id}`: Delete a category.
 
 ### Phase 2 - Bug Fixes
 1. **Bug 1**: Resolved inaccurate search results.
-  - **Solution**: Optimized SQL query logic.
+- **Solution**: Optimized SQL query logic.
 2. **Bug 2**: Prevented duplication during updates.
-  - **Solution**: Ensured updates modify existing records.
-    ![screenshot] ![update.bug2.PNG](..%2F..%2F..%2FDesktop%2Fupdate.bug2.PNG)
-g
+- **Solution**: Ensured updates modify existing records.
+
+
 
 ### Phase 4 - Update Profile
 1. **Update Profile (Optional)**:
-  - Add and update user profiles.
+- Add and update user profiles.
 
 ---
 
@@ -69,7 +69,7 @@ git clone <repository-url>
 cd <project-folder>
 ---------------------------------------------------------------------------------------------------------
 
-**Interesting Code Section:
+### 2. Interesting Code Section:
 
 One of the most interesting sections of the code is the **Product Search and Filter** functionality. This method allows users to search for products by category, price range, and color, and efficiently retrieves data from the database using optimized SQL queries.
 
